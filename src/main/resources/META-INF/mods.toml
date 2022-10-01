@@ -1,0 +1,22 @@
+modLoader="javafml" #mandatory
+loaderVersion="[33,36)" #mandatory This is typically bumped every Minecraft version by Forge. See our download page for lists of versions.
+license="DSMSL (DON'T SNATCH MA STUFF LICENSE)"
+[[mods]] #mandatory
+modId="panoramica" #mandatory
+version="1.2.0" #mandatory
+displayName="Panoramica" #mandatory
+authors="Keksuccino" #optional
+description='''
+Panorama Cubes - Now 16% more cuby!
+
+Panoramica © Copyright 2020-2022 Keksuccino.
+Panoramica is licensed under DSMSL (DON'T SNATCH MA STUFF LICENSE).
+See the mod's GitHub for more information about this license.
+'''
+
+[[dependencies.panoramica]]
+modId="konkrete"
+mandatory=true
+ordering="NONE"
+versionRange="[1.3.2,)"
+side="BOTH"
