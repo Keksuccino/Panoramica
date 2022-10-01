@@ -1,0 +1,13 @@
+[
+{
+  "modid": "panoramica",
+  "name": "Panoramica",
+  "description": "Panorama Cubes - Now 16% more cuby!\n\nPanoramica © Copyright 2020-2022 Keksuccino.\nPanoramica is licensed under DSMSL (DON'T SNATCH MA STUFF LICENSE).\nSee the mod's GitHub for more information about this license.",
+  "version": "1.2.0",
+  "mcversion": "${mcversion}",
+  "updateUrl": "",
+  "authorList": ["Keksuccino"],
+  "screenshots": [],
+  "dependencies": []
+}
+]

@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "package": "de.keksuccino.panoramica.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "minVersion": "0.8",
+  "client": [
+    "client.MixinEntityRenderer",
+    "client.MixinGuiIngame",
+    "client.MixinGuiIngameForge"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "refmap": "panoramica.mixin-refmap.json",
+  "plugin": "de.keksuccino.panoramica.mixin.PanoramicaMixinPlugin"
+}
