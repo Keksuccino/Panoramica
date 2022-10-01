@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "id": "panoramica",
+  "version": "1.2.0",
+  "name": "Panoramica",
+  "description": "Panorama Cubes - Now 16% more cuby! | Panoramica © Copyright 2020-2022 Keksuccino. Panoramica is licensed under DSMSL (DON'T SNATCH MA STUFF LICENSE). See the mod's GitHub for more information about this license.",
+  "environment": "client",
+  "authors": [
+    "Keksuccino"
+  ],
+  "contributors": [],
+  "contact": {},
+  "license": "DSMSL (DON'T SNATCH MA STUFF LICENSE)",
+  "icon": "assets/panoramica/icon.png",
+  "entrypoints": {
+    "main": [
+      "de.keksuccino.panoramica.Panoramica"
+    ],
+    "client": [],
+    "server": []
+  },
+  "mixins": [
+    "panoramica.mixin.json"
+  ],
+  "depends": {
+    "fabricloader": ">=0.12.6",
+    "fabric": "*",
+    "minecraft": "1.18.x",
+    "konkrete": ">=1.3.3",
+    "java": ">=17"
+  }
+}
