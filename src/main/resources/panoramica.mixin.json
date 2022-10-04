@@ -1,0 +1,16 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "de.keksuccino.panoramica.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "mixins": [],
+  "client": [
+    "client.MixinMinecraft",
+    "client.MixinGameRenderer"
+  ],
+  "server": [],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "refmap": "panoramica.mixins-refmap.json"
+}
