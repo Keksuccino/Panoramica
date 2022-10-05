@@ -11,7 +11,7 @@ import net.minecraftforge.fml.loading.FMLEnvironment;
 public class Panoramica {
 
 	public static Config config;
-	public static final String VERSION = "1.2.0";
+	public static final String VERSION = "1.2.1";
 	
     public Panoramica() {
 
@@ -21,7 +21,11 @@ public class Panoramica {
 
 			Keybinds.init();
 
-			PanoramicaHandler.init();
+			if (config.getOrDefault("use_new_system", false)) {
+				PanoramicaHandler.init();
+			} else {
+				LegacyPanoramicaHandler.init();
+			}
 
 		}
     	
@@ -38,8 +42,9 @@ public class Panoramica {
     		config = new Config("config/panoramica/config.txt");
         	
         	config.registerValue("panoramaresolution", 512, "general");
+			config.registerValue("use_new_system", false, "general", "The new system takes panorama screenshots without rotating the player, but is not compatible with mods like OptiFine and Iris.");
 
-        	config.syncConfig();
+			config.syncConfig();
         	
         	config.clearUnusedValues();
         	

@@ -32,7 +32,7 @@ minecraft {
     runs {
         client {
             workingDirectory project.file('run')
-//            arg "-mixin.config=panoramica.mixin.json"
+            arg "-mixin.config=panoramica.mixin.json"
             mods {
                 drippyloadingscreen {
                     source sourceSets.main
@@ -60,13 +60,13 @@ dependencies {
 	
 	implementation fileTree('libs') { include '*.jar' }
 
-    //annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
-    //testAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
+    testAnnotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
 }
 
 mixin {
-    add sourceSets.main, "drippyloadingscreen.mixin-refmap.json"
+    add sourceSets.main, "panoramica.mixin-refmap.json"
 }
 
 jar {
@@ -80,9 +80,9 @@ jar {
             "Implementation-Vendor" :"Keksuccino",
             "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
             "Signing-Fingerprint": project.hasProperty('fingerprint') ? project.property('fingerprint') : 'unsigned',
-			//"TweakClass": "org.spongepowered.asm.launch.MixinTweaker",
-            //"TweakOrder": 0,
-            //"MixinConfigs" : "panoramica.mixin.json"
+			"TweakClass": "org.spongepowered.asm.launch.MixinTweaker",
+            "TweakOrder": 0,
+            "MixinConfigs" : "panoramica.mixin.json"
         ])
     }
 }
