@@ -15,7 +15,7 @@ public class PanoramicaHandler {
 
 	public static void init() {
 
-		Konkrete.getEventHandler().registerEventsFrom(new PanoramicaHandler());
+		Konkrete.getEventHandler().registerEventsFrom(new LegacyPanoramicaHandler());
 
 	}
 
