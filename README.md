@@ -14,7 +14,7 @@ Source code for the Panoramica Minecraft mod.
 
 ## Download
 
-Panoramica is available on [CurseForge](https://www.curseforge.com/minecraft/mc-mods/panoramica)!
+Panoramica is available on [CurseForge](https://www.curseforge.com/minecraft/mc-mods/panoramica) and [Modrinth](https://modrinth.com/mod/panoramica)!
 
 ## Licensing
 
