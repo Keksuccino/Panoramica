@@ -1,0 +1,88 @@
+
+CHANGELOG | PANORAMICA v1.3.0
+ 
+- Ported to NeoForge 1.20.4
+- Added support for latest Konkrete build
+- Improved screenshot taking process (could fix some issues with HUD elements being visible on screenshots)
+- Changed config names (old config stuff isn't working anymore, you need to set custom config values again, sorry)
+
+%changelog:end%
+
+
+
+
+
+CHANGELOG
+
+- Added support for MC 1.20.2
+
+%changelog:end%
+
+
+
+
+
+CHANGELOG | PANORAMICA v1.2.1 for MC 1.18+
+ 
+- Fixed: Performance/Rendering mods like OptiFine and Iris breaking Panoramica
+
+%changelog:end%
+
+
+
+
+
+CHANGELOG | PANORAMICA v1.2.0
+ 
+- Improved: Now uses a fixed FOV of 90 and blocks all FOV modifiers while taking a panorama
+- Improved: Now freezes the world in singleplayer while taking a panorama
+ 
+- Changed: Taking a panorama now outputs a vanilla-like "screenshot taken" message to the chat instead of opening a popup
+
+%changelog:end%
+
+
+
+
+
+CHANGELOG | PANORAMICA v1.1.2-2 for Fabric 1.19.X
+ 
+- Fixed: Crash on game start
+
+%changelog:end%
+
+
+
+
+
+- Added support for MC 1.19+
+
+%changelog:end%
+
+
+
+
+
+CHANGELOG | PANORAMICA v1.1.2-1 for Fabric
+ 
+- Fixed: Incompatibility with Mod Menu
+
+%changelog:end%
+
+
+
+
+
+CHANGELOG | PANORAMICA v1.1.2
+ 
+- Ported the mod to Fabric and added support for 1.12 and 1.18
+ 
+- Lifted minimum required Konkrete version to 1.3.2
+ 
+- Changed: Name of keybind in controls settings
+ 
+- Fixed: Panoramas getting saved to wrong directory in some cases
+- Fixed: Typo in controls category
+
+%changelog:end%
+
