@@ -1,0 +1,34 @@
+{
+  "schemaVersion": 1,
+  "id": "${mod_id}",
+  "version": "${mod_version}",
+  "name": "${mod_name}",
+  "description": "${mod_description}",
+  "environment": "*",
+  "authors": [
+    "${mod_authors}"
+  ],
+  "contributors": [
+  ],
+  "contact": {},
+  "license": "${mod_license}",
+  "icon": "${mod_id}_logo_128x128.png",
+  "entrypoints": {
+    "main": [
+      "de.keksuccino.panoramica.PanoramicaFabric"
+    ],
+    "client": [],
+    "server": []
+  },
+  "mixins": [
+    "${mod_id}.mixins.json",
+    "${mod_id}.fabric.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${fabric_loader_version}",
+    "fabric": ">=${fabric_short_version}",
+    "minecraft": ">=${minecraft_version}",
+    "java": ">=17",
+    "konkrete": ">=1.9.1"
+  }
+}

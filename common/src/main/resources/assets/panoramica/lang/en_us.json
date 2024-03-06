@@ -1,0 +1,6 @@
+{
+  "panoramica.keybind.category": "Panoramica",
+  "panoramica.keybind.keybinds.take_screenshot": "Take Panorama Screenshot",
+  "panoramica.error.fullscreen": "Please disable fullscreen mode before taking a panorama screenshot!",
+  "panoramica.error.screenshot_failed": "There was an error while trying to take the panorama screenshot!"
+}
