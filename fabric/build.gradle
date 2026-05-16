@@ -3,7 +3,7 @@ plugins {
     id 'java'
     id 'idea'
     id 'maven-publish'
-    id 'fabric-loom' version '1.7.4'
+    id 'fabric-loom' version '1.13.6'
 }
 
 base {

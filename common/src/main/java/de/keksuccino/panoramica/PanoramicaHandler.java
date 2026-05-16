@@ -4,16 +4,17 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import com.mojang.blaze3d.platform.NativeImage;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Screenshot;
-import net.minecraft.network.chat.ClickEvent;
 import net.minecraft.network.chat.Component;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.lwjgl.glfw.GLFW;
 import net.minecraft.client.Minecraft;
+import org.lwjgl.glfw.GLFW;
 
 @SuppressWarnings("all")
 public class PanoramicaHandler {
@@ -63,7 +64,7 @@ public class PanoramicaHandler {
 						mc.options.hideGui = true;
 					}
 				} else {
-					Minecraft.getInstance().player.sendSystemMessage(Component.translatable("panoramica.error.fullscreen").withStyle(ChatFormatting.RED));
+					Minecraft.getInstance().gui.getChat().addMessage(Component.translatable("panoramica.error.fullscreen").withStyle(ChatFormatting.RED));
 				}
 
 			}
@@ -77,11 +78,11 @@ public class PanoramicaHandler {
 					this.width = mc.getWindow().getWidth();
 					this.height = mc.getWindow().getHeight();
 					int res = Panoramica.getConfig().getOrDefault("panorama_resolution", 512);
-					GLFW.glfwSetWindowSizeLimits(Minecraft.getInstance().getWindow().getWindow(), 100, 100, 20000, 20000);
-					GLFW.glfwSetWindowSize(mc.getWindow().getWindow(), res, res);
+					GLFW.glfwSetWindowSizeLimits(mc.getWindow().handle(), 100, 100, 20000, 20000);
+					GLFW.glfwSetWindowSize(mc.getWindow().handle(), res, res);
 					Minecraft.getInstance().resizeDisplay();
 				} else {
-					if (this.tick >= this.prevTick + this.delay) {
+					if (this.shotsTaken < 6 && this.tick >= this.prevTick + this.delay) {
 						if (!this.prepareScreenshot) {
 							this.setCameraRotation();
 							this.prevTick = this.tick;
@@ -97,19 +98,20 @@ public class PanoramicaHandler {
 				}
 
 				if (this.shotsTaken >= 6) {
+					if (this.screenshots.size() >= 6) {
+						this.tick = 0;
+						this.active = false;
 
-					this.tick = 0;
-					this.active = false;
+						this.finishPanorama();
 
-					this.finishPanorama();
+						GLFW.glfwSetWindowSize(mc.getWindow().handle(), this.width, this.height);
+						Minecraft.getInstance().resizeDisplay();
 
-					GLFW.glfwSetWindowSize(mc.getWindow().getWindow(), this.width, this.height);
-					Minecraft.getInstance().resizeDisplay();
+						mc.options.hideGui = this.cachedGuiVisibility;
 
-					mc.options.hideGui = this.cachedGuiVisibility;
-
-					mc.mouseHandler.grabMouse();
-
+						mc.mouseHandler.grabMouse();
+					} else {
+					}
 				}
 
 			}
@@ -126,35 +128,47 @@ public class PanoramicaHandler {
 	}
 
 	private void setCameraRotation() {
+		if (mc.player == null) {
+			return;
+		}
 
 		if (this.shotsTaken == 0) {
-			mc.player.moveTo(mc.player.getX(), mc.player.getY(), mc.player.getZ(), -180, 0);
+			this.applyCameraRotation(-180f, 0f);
 		}
 
 		if (this.shotsTaken == 1) {
-			mc.player.moveTo(mc.player.getX(), mc.player.getY(), mc.player.getZ(), -90, 0);
+			this.applyCameraRotation(-90f, 0f);
 		}
 
 		if (this.shotsTaken == 2) {
-			mc.player.moveTo(mc.player.getX(), mc.player.getY(), mc.player.getZ(), 0, 0);
+			this.applyCameraRotation(0f, 0f);
 		}
 
 		if (this.shotsTaken == 3) {
-			mc.player.moveTo(mc.player.getX(), mc.player.getY(), mc.player.getZ(), 90, 0);
+			this.applyCameraRotation(90f, 0f);
 		}
 
 		if (this.shotsTaken == 4) {
-			mc.player.moveTo(mc.player.getX(), mc.player.getY(), mc.player.getZ(), -180, -90);
+			this.applyCameraRotation(-180f, -90f);
 		}
 
 		if (this.shotsTaken == 5) {
-			mc.player.moveTo(mc.player.getX(), mc.player.getY(), mc.player.getZ(), -180, 90);
+			this.applyCameraRotation(-180f, 90f);
 		}
 
 	}
 
+	private void applyCameraRotation(float yaw, float pitch) {
+		mc.player.setYRot(yaw);
+		mc.player.setYHeadRot(yaw);
+		mc.player.setYBodyRot(yaw);
+		mc.player.setXRot(pitch);
+	}
+
 	private void takeScreenshot() {
-		this.screenshots.add(Screenshot.takeScreenshot(mc.getMainRenderTarget()));
+		Screenshot.takeScreenshot(mc.getMainRenderTarget(), img -> {
+			this.screenshots.add(img);
+		});
 	}
 
 	private boolean finishPanorama() {
@@ -164,23 +178,22 @@ public class PanoramicaHandler {
 				int i = 0;
 				for (NativeImage ni : this.screenshots) {
 					try {
-						ni.writeToFile(new File(this.saveDirectory.getPath() + "/panorama_" + i + ".png"));
+						File output = new File(this.saveDirectory.getPath() + "/panorama_" + i + ".png");
+						ni.writeToFile(output);
 					} catch (IOException e) {
 						e.printStackTrace();
 					}
 					i++;
 				}
 
-				Component compSaveDir = Component.literal(this.saveDirectory.getName()).withStyle(ChatFormatting.UNDERLINE).withStyle((style) -> {
-					return style.withClickEvent(new ClickEvent(ClickEvent.Action.OPEN_FILE, this.saveDirectory.getAbsolutePath()));
-				});
+				Component compSaveDir = Component.literal(this.saveDirectory.getName()).withStyle(ChatFormatting.UNDERLINE);
 				Component compSuccessMsg = Component.translatable("screenshot.success", compSaveDir);
-				Minecraft.getInstance().player.sendSystemMessage(compSuccessMsg);
+				Minecraft.getInstance().gui.getChat().addMessage(compSuccessMsg);
 
 				return true;
 
 			} else {
-				Minecraft.getInstance().player.sendSystemMessage(Component.translatable("panoramica.error.screenshot_failed").withStyle(ChatFormatting.RED));
+				Minecraft.getInstance().gui.getChat().addMessage(Component.translatable("panoramica.error.screenshot_failed").withStyle(ChatFormatting.RED));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
