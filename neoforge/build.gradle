@@ -1,13 +1,14 @@
-
 plugins {
     id 'idea'
     id 'maven-publish'
-    id 'net.neoforged.gradle.userdev' version '7.0.81'
+    id 'net.neoforged.moddev' version '2.0.141'
     id 'java-library'
 }
 base {
     archivesName = "${mod_id}"
 }
+
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
 
 // Automatically enable neoforge AccessTransformers if the file exists
 // This location is hardcoded in FML and can not be changed.
@@ -16,33 +17,43 @@ if (file('src/main/resources/META-INF/accesstransformer.cfg').exists()) {
     minecraft.accessTransformers.file file('src/main/resources/META-INF/accesstransformer.cfg')
 }
 
-runs {
-    configureEach {
-        modSource project.sourceSets.main
-    }
-    client {
-	    workingDirectory project.file('../run_client')
-        systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
-    }
-    server {
-	    workingDirectory project.file('../run_server')
-        systemProperty 'neoforge.enabledGameTestNamespaces', project.mod_id
-        programArgument '--nogui'
-    }
-}
-
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 dependencies {
-    implementation "net.neoforged:neoforge:${neoforge_version}"
     compileOnly project(":common")
-    implementation "maven.modrinth:konkrete:1.9.1-1.20.4-neoforge"
+    implementation "maven.modrinth:konkrete:${konkrete_neoforge_version}"
+}
+
+neoForge {
+    version = project.neoforge_version
+
+    runs {
+        client {
+            client()
+            gameDirectory = project.file('../run_client')
+            systemProperties.put('neoforge.enabledGameTestNamespaces', project.mod_id)
+        }
+        server {
+            server()
+            gameDirectory = project.file('../run_server')
+            systemProperties.put('neoforge.enabledGameTestNamespaces', project.mod_id)
+            programArguments.addAll '--nogui'
+        }
+    }
+
+    mods {
+        "${mod_id}" {
+            sourceSet(sourceSets.main)
+        }
+    }
 }
 
 // NeoGradle compiles the game, but we don't want to add our common code to the game's code
 Spec<Task> notNeoTask = { Task it -> !it.name.startsWith("neo") } as Spec<Task>
 
 tasks.withType(JavaCompile).matching(notNeoTask).configureEach {
+    options.encoding = 'UTF-8'
+    options.getRelease().set(21)
     source(project(":common").sourceSets.main.allSource)
 }
 
@@ -60,7 +71,7 @@ tasks.withType(ProcessResources).matching(notNeoTask).configureEach {
 
 publishing {
     publications {
-        mavenJava(MavenPublication) {
+        create("mavenJava", MavenPublication) {
             artifactId base.archivesName.get()
             from components.java
         }

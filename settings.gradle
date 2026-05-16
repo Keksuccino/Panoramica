@@ -28,5 +28,4 @@ plugins {
 rootProject.name = 'panoramica-1.20.4'
 include("common")
 include("fabric")
-include("forge")
 include("neoforge")
