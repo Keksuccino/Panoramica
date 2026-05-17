@@ -8,7 +8,7 @@ base {
     archivesName = "${mod_id}"
 }
 
-java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+java.toolchain.languageVersion = JavaLanguageVersion.of(25)
 
 // Automatically enable neoforge AccessTransformers if the file exists
 // This location is hardcoded in FML and can not be changed.
@@ -49,24 +49,35 @@ neoForge {
 }
 
 // NeoGradle compiles the game, but we don't want to add our common code to the game's code
-Spec<Task> notNeoTask = { Task it -> !it.name.startsWith("neo") } as Spec<Task>
+tasks.withType(JavaCompile).configureEach {
+    if (!name.startsWith("neo")) {
+        options.encoding = 'UTF-8'
+        options.getRelease().set(25)
+    }
+}
 
-tasks.withType(JavaCompile).matching(notNeoTask).configureEach {
-    options.encoding = 'UTF-8'
-    options.getRelease().set(21)
+tasks.named("compileJava") {
     source(project(":common").sourceSets.main.allSource)
 }
 
-tasks.withType(Javadoc).matching(notNeoTask).configureEach {
-    source(project(":common").sourceSets.main.allJava)
+tasks.named("test", Test) {
+    failOnNoDiscoveredTests = false
+}
+
+tasks.withType(Javadoc).configureEach {
+    if (!name.startsWith("neo")) {
+        source(project(":common").sourceSets.main.allJava)
+    }
 }
 
 tasks.named("sourcesJar", Jar) {
     from(project(":common").sourceSets.main.allSource)
 }
 
-tasks.withType(ProcessResources).matching(notNeoTask).configureEach {
-    from project(":common").sourceSets.main.resources
+tasks.withType(ProcessResources).configureEach {
+    if (!name.startsWith("neo")) {
+        from project(":common").sourceSets.main.resources
+    }
 }
 
 publishing {

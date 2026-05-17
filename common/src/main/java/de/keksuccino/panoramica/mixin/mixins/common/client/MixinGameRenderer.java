@@ -1,28 +1,12 @@
 package de.keksuccino.panoramica.mixin.mixins.common.client;
 
-import de.keksuccino.panoramica.PanoramicaHandler;
-import net.minecraft.client.Camera;
 import net.minecraft.client.renderer.GameRenderer;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+// In MC 26.x, getFov() and shouldRenderBlockOutline() were removed from GameRenderer.
+// FOV is now controlled via Camera.enablePanoramicMode() and block outline via
+// GameRenderer.setRenderBlockOutline(boolean), handled directly in PanoramicaHandler.
 @Mixin(GameRenderer.class)
 public class MixinGameRenderer {
-
-    @Inject(method = "getFov", at = @At("HEAD"), cancellable = true)
-    private void headGetFov_Panoramica(Camera camera, float f, boolean bl, CallbackInfoReturnable<Float> info) {
-        if (PanoramicaHandler.panoramaMode) {
-            info.setReturnValue(90.0F);
-        }
-    }
-
-    @Inject(method = "shouldRenderBlockOutline", at = @At("HEAD"), cancellable = true)
-    private void headShouldRenderBlockOutline_Panoramica(CallbackInfoReturnable<Boolean> info) {
-        if (PanoramicaHandler.panoramaMode) {
-            info.setReturnValue(false);
-        }
-    }
 
 }

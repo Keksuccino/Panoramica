@@ -64,7 +64,7 @@ public class PanoramicaHandler {
 						mc.options.hideGui = true;
 					}
 				} else {
-					Minecraft.getInstance().gui.getChat().addMessage(Component.translatable("panoramica.error.fullscreen").withStyle(ChatFormatting.RED));
+					if (mc.player != null) mc.player.sendSystemMessage(Component.translatable("panoramica.error.fullscreen").withStyle(ChatFormatting.RED));
 				}
 
 			}
@@ -72,6 +72,9 @@ public class PanoramicaHandler {
 			if (this.active) {
 
 				mc.mouseHandler.releaseMouse();
+				// Enable MC's built-in panoramic camera mode (provides 90° FOV) and hide block outline
+				mc.gameRenderer.getMainCamera().enablePanoramicMode();
+				mc.gameRenderer.setRenderBlockOutline(false);
 
 				if (this.tick == 0) {
 					this.tick++;
@@ -80,7 +83,7 @@ public class PanoramicaHandler {
 					int res = Panoramica.getConfig().getOrDefault("panorama_resolution", 512);
 					GLFW.glfwSetWindowSizeLimits(mc.getWindow().handle(), 100, 100, 20000, 20000);
 					GLFW.glfwSetWindowSize(mc.getWindow().handle(), res, res);
-					Minecraft.getInstance().resizeDisplay();
+					mc.getWindow().setGuiScale(mc.getWindow().calculateScale(mc.options.guiScale().get(), mc.isEnforceUnicode()));
 				} else {
 					if (this.shotsTaken < 6 && this.tick >= this.prevTick + this.delay) {
 						if (!this.prepareScreenshot) {
@@ -104,8 +107,11 @@ public class PanoramicaHandler {
 
 						this.finishPanorama();
 
+						mc.gameRenderer.getMainCamera().disablePanoramicMode();
+						mc.gameRenderer.setRenderBlockOutline(true);
+
 						GLFW.glfwSetWindowSize(mc.getWindow().handle(), this.width, this.height);
-						Minecraft.getInstance().resizeDisplay();
+					mc.getWindow().setGuiScale(mc.getWindow().calculateScale(mc.options.guiScale().get(), mc.isEnforceUnicode()));
 
 						mc.options.hideGui = this.cachedGuiVisibility;
 
@@ -119,6 +125,10 @@ public class PanoramicaHandler {
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			this.active = false;
+			try {
+				mc.gameRenderer.getMainCamera().disablePanoramicMode();
+				mc.gameRenderer.setRenderBlockOutline(true);
+			} catch (Exception ignored) {}
 		}
 
 		if (!this.active) {
@@ -188,12 +198,12 @@ public class PanoramicaHandler {
 
 				Component compSaveDir = Component.literal(this.saveDirectory.getName()).withStyle(ChatFormatting.UNDERLINE);
 				Component compSuccessMsg = Component.translatable("screenshot.success", compSaveDir);
-				Minecraft.getInstance().gui.getChat().addMessage(compSuccessMsg);
+				if (mc.player != null) mc.player.sendSystemMessage(compSuccessMsg);
 
 				return true;
 
 			} else {
-				Minecraft.getInstance().gui.getChat().addMessage(Component.translatable("panoramica.error.screenshot_failed").withStyle(ChatFormatting.RED));
+				if (mc.player != null) mc.player.sendSystemMessage(Component.translatable("panoramica.error.screenshot_failed").withStyle(ChatFormatting.RED));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

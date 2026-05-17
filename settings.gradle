@@ -1,10 +1,10 @@
 pluginManagement {
     repositories {
-        gradlePluginPortal()
         maven {
             name = 'Fabric'
             url = 'https://maven.fabricmc.net/'
         }
+        gradlePluginPortal()
         maven {
             name = 'NeoForge'
             url = 'https://maven.neoforged.net/releases/'
@@ -22,6 +22,13 @@ pluginManagement {
 
 plugins {
     id 'org.gradle.toolchains.foojay-resolver-convention' version '0.8.0'
+}
+
+// Workaround: ModDev 2.0.141's IntelliJ integration applies idea-ext APIs that are
+// not compatible with Gradle 9's Groovy runtime. Force this sync flag off so
+// ModDev uses NoIdeIntegration during IDE import.
+if (Boolean.getBoolean("idea.sync.active")) {
+    System.setProperty("idea.sync.active", "false")
 }
 
 // This should match the folder name of the project, or else IDEA may complain (see https://youtrack.jetbrains.com/issue/IDEA-317606)

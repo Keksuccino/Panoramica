@@ -21,18 +21,20 @@ public abstract class MixinMinecraft {
 
     @Unique private static final Logger LOGGER_PANORAMICA = LogManager.getLogger();
 
-    @Inject(method = "runTick", at = @At("HEAD"))
+    @Inject(method = "tick", at = @At("HEAD"))
     private void headRunTick_Panoramica(CallbackInfo info) {
+        this.forcePauseForPanorama();
         try {
             PanoramicaHandler.INSTANCE.onClientTick();
         } catch (Exception ex) {
             LOGGER_PANORAMICA.error("[PANORAMICA] Client tick failed!", ex);
         }
+        // Ensure the activation tick is paused too right after panoramaMode flips to true.
+        this.forcePauseForPanorama();
     }
 
-    @Inject(method = "runTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/components/DebugScreenOverlay;logFrameDuration(J)V"))
-    private void afterSetPause_Panoramica(CallbackInfo info) {
-        //Force-pause game when taking panorama screenshot (will automatically get reset by runTick() when panoramicMode is false again)
+    @Unique
+    private void forcePauseForPanorama() {
         boolean isPausePossible = this.hasSingleplayerServer() && (this.singleplayerServer != null) && !this.singleplayerServer.isPublished();
         if (isPausePossible && PanoramicaHandler.panoramaMode && !this.pause) {
             this.pause = true;
