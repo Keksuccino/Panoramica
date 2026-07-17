@@ -1,5 +1,5 @@
 
-# ⚠️ This mod is not actively maintained anymore, and in the near future will be replaced by another mod I'm currently working on.
+# ⚠️ This mod is not actively maintained anymore, and will be replaced by another mod I'm currently working on in the near future.
 
 <br>
 <br>
