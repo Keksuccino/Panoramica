@@ -1,3 +1,11 @@
+
+# ⚠️ This mod is not actively maintained anymore, and in the near future will be replaced by another mod I'm currently working on.
+
+<br>
+<br>
+<br>
+<br>
+
 ## About
 
 Source code for the Panoramica Minecraft mod.
